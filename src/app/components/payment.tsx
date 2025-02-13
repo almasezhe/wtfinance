@@ -50,7 +50,7 @@ export default function Payment() {
         >
             {loading ? "Loading..." : (
                 <>
-                    <span className="text-xl font-bold">$4.99</span>
+                    <span className="text-xl font-bold text-gray-200">$4.99</span>
                     <span className="text-sm text-gray-200 ml-2 line-through">$10</span>
                 </>
             )}

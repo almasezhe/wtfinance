@@ -1,5 +1,6 @@
 'use client'
 import CryptoJS from "crypto-js"; // <-- добавляем
+import JSZip from "jszip";
 import React, { useState, useRef, useEffect, ChangeEvent } from "react";
 import Navbar from "../components/navbar";
 import {
@@ -12,6 +13,10 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+
+
+//TODO
+// ZIP file загрузка
 
 function encryptData(plainData: string, secretKey: string) {
     return CryptoJS.AES.encrypt(plainData, secretKey).toString();
@@ -124,24 +129,14 @@ function processHtmlContent(html: string) {
 }
 
 // Функция для обработки TXT-документа.
+
+// Функция для обработки TXT-документа.
 function processTxtContent(txt: string) {
-  const lines = txt.split("\n");
-  const messages: any[] = [];
-  const regex = /^\[(.*?)\]\s*(.*?):\s*(.*)$/;
-  for (const line of lines) {
-    const match = line.match(regex);
-    if (match) {
-      const date = match[1].trim();
-      const from = match[2].trim();
-      const text = match[3].trim();
-      messages.push({ from, date, text, media_type: null });
-    }
-  }
   return {
     name: null,
     type: null,
     id: null,
-    messages,
+    documentText: txt,
   };
 }
 
@@ -339,7 +334,8 @@ export default function LoveAI() {
   fetchPaidContent();
 }, []);
 
-  const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
+ const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log("handleFileUpload triggered");
     setErrorMessage("");
     const file = event.target.files?.[0];
     if (!file) return;
@@ -347,16 +343,50 @@ export default function LoveAI() {
       setErrorMessage("File is too big");
       return;
     }
-    const reader = new FileReader();
-    reader.onload = (e: ProgressEvent<FileReader>) => {
-      const result = e.target?.result;
-      if (typeof result === "string") {
-        setUploadedFileContent(result);
-      }
-    };
-    reader.readAsText(file);
+    const fileName = file.name.toLowerCase();
+    if (fileName.endsWith('.zip') || fileName.endsWith('.dat') || fileName.endsWith('.unknown')) {
+      const reader = new FileReader();
+      reader.onload = async (e: ProgressEvent<FileReader>) => {
+        const result = e.target?.result;
+        if (result instanceof ArrayBuffer) {
+          console.log(result);
+          try {
+            const zip = await JSZip.loadAsync(result);
+            let txtFileFound = false;
+            for (const name in zip.files) {
+              console.log(name);
+              if (name.toLowerCase().endsWith('.txt')) {
+                const txtContent = await zip.files[name].async("string");
+                setUploadedFileContent(txtContent);
+                txtFileFound = true;
+                break;
+              }
+            }
+            if (!txtFileFound) {
+              setErrorMessage("No .txt file found in archive");
+            }
+          } catch (err) {
+            console.error("Error processing zip file:", err);
+            setErrorMessage("Error processing zip file");
+          }
+        } else {
+          console.log("File cannot be read as ArrayBuffer");
+          setErrorMessage("File cannot be read as ArrayBuffer");
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    } else {
+      const reader = new FileReader();
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        const result = e.target?.result;
+        if (typeof result === "string") {
+          setUploadedFileContent(result);
+          console.log("log");
+        }
+      };
+      reader.readAsText(file);
+    }
   };
-
   useEffect(() => {
     if (!showResults) return;
     const observer = new IntersectionObserver(

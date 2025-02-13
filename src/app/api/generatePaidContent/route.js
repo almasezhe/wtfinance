@@ -62,6 +62,8 @@ Based on this data, derive an insightful relationship analysis and return the ou
    - **Dominant emotional patterns**, expressions of affection, humor, or conflict.  
    - **Communication balance** (who talks more, who reacts more, who initiates deep conversations).  
    - **Potential red flags or strengths** in the relationship.  
+   - If there is no one of the OR both names in the inputted data, just replace the names with partner 1, partner 2, partner. IMPORTANT
+
 
 2. **Construct detailed relationship insights**, analyzing key dynamics such as:  
    - The **evolution of feelings** over time.  
@@ -84,13 +86,13 @@ Based on this data, derive an insightful relationship analysis and return the ou
    - Use **rich descriptions, natural dialogue, and emotionally engaging tension**.  
    - Subtly **reinforce key moments of passion, longing, and connection** with **romantic emojis** (e.g., ❤️, 🥰, 💫, 🔥).  
    - **End with an open-ended, thought-provoking triplet of dots (\"...\")** to leave the reader intrigued.  
+   - If there is no one of the OR both names in the inputted data, just replace the names with partner 1, partner 2, partner. IMPORTANT
+
 
 5. **Personalized Date Ideas (Minimum 7)**  
-   - **Base the suggestions on their chat themes** (e.g., if they always talk about coffee, suggest a **café-hopping adventure**).  
+   - **Base the suggestions on their chat themes and their specific messages** (e.g., if they always talk about coffee, suggest a **café-hopping adventure**).  
    - Example suggestions:  
-     - \"Midnight walk under city lights 🌆.\"  
-     - \"DIY sushi night 🍣.\"  
-     - \"Retro arcade date 🎮.\"  
+     - \"Studying to exams together in the nature 🌳.\"  
 
 6. **Gift Suggestions (3 total)**  
    - One **personalized** gift for **Person A**.  
@@ -107,6 +109,12 @@ Based on this data, derive an insightful relationship analysis and return the ou
    - **ALWAYS RETURN** response based on users' messages' language  
    - **If data is missing**, intelligently **guess or return null**, but **keep the JSON structure intact**.  
    - **Ensure numerical consistency**:  
+   - If there is missing one OR both names in the inputted data, just replace the names with partner 1, partner 2, partner. IMPORTANT Especially in the [  \"mostActive\": \"Person A\",  
+  \"mostNonchalant\": \"Person B\",  
+  \"mostRedFlag\": \"Person C\",  
+  \"dominant\": \"Person D\",  
+  \"funnier\": \"Person E\",  
+  \"romantic\": \"Person F\",  ]
      - \"realMonthScore\" should **never drop below 47**.  
      - \"predictedMonthScore\" should always have **at least 4 values**.  
      - \"months\" must match the **actual months of their chat** + 3 additional months.  `

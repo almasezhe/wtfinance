@@ -76,6 +76,7 @@ Based on this data, derive an insightful relationship analysis and return the ou
    - **Dominant emotional patterns**, expressions of affection, humor, or conflict.  
    - **Communication balance** (who talks more, who reacts more, who initiates deep conversations).  
    - **Potential red flags or strengths** in the relationship.  
+   
 
 2. **Generate a compatibility score** (0-100%) based on emotional engagement, conversation balance, and sentiment trends.  
 
@@ -85,12 +86,17 @@ Based on this data, derive an insightful relationship analysis and return the ou
    - **Patterns of affection vs. conflict**.  
    - **Engagement trends** (who initiates more, who replies faster, etc.).  
    - **Behavioral tendencies** (e.g., Who is more expressive? Who ghosts more?).  
+   - If there is missing one OR both names in the inputted data, just replace the names with partner 1, partner 2, partner. IMPORTANT
+
+
 
 4. **Love Advice (4-7 tailored insights)**  
    - Each piece of advice should be **personalized** based on chat themes.  
    - Include specific recommendations to **enhance communication, trust, and intimacy**.  
    - Generate an **extra topic called \"Brainrot\"**, written like a 12-year-old TikTok addict, using Gen Z slang like, use this just as an example, dont copy it you need to create other:  
      *\"Bro, y’all are straight-up cooked 💀. The way you keep saying 'we're so back' just for the drama is absolute cinema. Skibidi rizz, but y’all gotta actually talk about your issues. Touch grass.\"*  
+   - If there is missing one OR both names in the inputted data, just replace the names with partner 1, partner 2, partner. IMPORTANT
+
 
 6. **Love Story Generation**  
    - **Transform their chat history into a deeply immersive romance novel.**  
@@ -99,11 +105,20 @@ Based on this data, derive an insightful relationship analysis and return the ou
    - Use **rich descriptions, natural dialogue, and emotionally engaging tension**.  
    - Subtly **reinforce key moments of passion, longing, and connection** with **romantic emojis** (e.g., ❤️, 🥰, 💫, 🔥).  
    - **End with an open-ended, thought-provoking triplet of dots (\"...\")** to leave the reader intrigued.  
+   - If there is missing one OR both names in the inputted data, just replace the names with partner 1, partner 2, partner. IMPORTANT
+
 
 9. **Formatting Rules**  
    - **Always return valid JSON** (No extra text, no errors).  
    - **Match the language** used in their messages. Especially in the insigts,loveStory,loveAdvice
    - **ALWAYS RETURN** response based on users' messages' language  
+   - If there is missing one OR both names in the inputted data, just replace the names with partner 1, partner 2, partner. IMPORTANT Especially in the [  \"mostActive\": \"Person A\",  
+  \"mostNonchalant\": \"Person B\",  
+  \"mostRedFlag\": \"Person C\",  
+  \"dominant\": \"Person D\",  
+  \"funnier\": \"Person E\",  
+  \"romantic\": \"Person F\",  ]
+
    - **If data is missing**, intelligently **guess or return null**, but **keep the JSON structure intact**.  
    - **Ensure numerical consistency**:  
      - \"realMonthScore\" should **never drop below 47**.  
