@@ -5,6 +5,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --glass-blur: 80%; /* Увеличиваем размытие */
+  scrollbar-color: #ff00c8 #F498AD
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +25,7 @@ body {
 html{
   scroll-behavior: smooth;
 }
-  
+html, body {
+  overflow-x: hidden; /* Отключаем горизонтальный скролл */
+  width: 100vw; /* Фиксируем ширину */
+}
