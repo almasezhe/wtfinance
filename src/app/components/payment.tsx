@@ -32,12 +32,12 @@ export default function Payment() {
 
         paddle.Checkout.open({
             items: [
-                { priceId: 'pri_01jkx004aw53k1apst7dn9xdcz', quantity: 1 }
+                { priceId: 'pri_01jkwzfmmecm85njcx76gnnm0b', quantity: 1 }
             ],
             settings: {
                 displayMode: 'overlay',
                 theme: 'dark',
-                successUrl: 'http://localhost:3000/payment-paid-314159265358979'
+                successUrl: 'https://lovertest.xyz/payment-paid-314159265358979'
             }
         });
     };

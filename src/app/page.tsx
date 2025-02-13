@@ -19,13 +19,13 @@ function encryptData(plainData: string, secretKey: string) {
   return CryptoJS.AES.encrypt(plainData, secretKey).toString();
 }
 
-// И функцию расшифрования
+// Функция расшифрования
 function decryptData(encryptedData: string, secretKey: string) {
   const bytes = CryptoJS.AES.decrypt(encryptedData, secretKey);
   return bytes.toString(CryptoJS.enc.Utf8);
 }
   
-// ✅ Register Chart.js components
+// Register Chart.js components
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend);
 
 // Default values
@@ -143,7 +143,6 @@ function isJson(content: string): boolean {
 }
 
 // Функция для ограничения сообщений до 2000 токенов (примерно: 1 токен ≈ 4 символа)
-// Берём сообщения с конца (самые новые) и суммируем их "токены"
 function limitMessages(messages: any[], maxTokens: number): any[] {
   let totalTokens = 0;
   const result: any[] = [];
@@ -159,6 +158,7 @@ function limitMessages(messages: any[], maxTokens: number): any[] {
   }
   return result;
 }
+
 const calculateTimeLeft = () => {
   const targetDate = new Date(2025, 1, 16, 0, 0, 0).getTime();
   const now = new Date().getTime();
@@ -179,7 +179,7 @@ const calculateTimeLeft = () => {
 
 export default function LoveAI() {
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-  // States for AI results
+  // Состояния для результатов AI
   const [compatibilityScore, setCompatibilityScore] = useState(defaultCompatibilityScore);
   const [realMonthScore, setRealMonthScore] = useState<number[]>(defaultMonthScore);
   const [predictedMonthScore, setPredictedMonthScore] = useState<number[]>([]);
@@ -188,7 +188,7 @@ export default function LoveAI() {
   const [loveStory, setLoveStory] = useState(defaultLoveStory);
   const [insights, setInsights] = useState(defaultInsights);
 
-  // States for additional stats
+  // Состояния для дополнительных статистик
   const [mostActive, setMostActive] = useState<string>(defaultMostActive);
   const [mostNonchalant, setMostNonchalant] = useState<string>(defaultMostNonchalant);
   const [mostRedFlag, setMostRedFlag] = useState<string>(defaultMostRedFlag);
@@ -196,22 +196,23 @@ export default function LoveAI() {
   const [funnier, setFunnier] = useState<string>(defaultFunnier);
   const [romantic, setRomantic] = useState<string>(defaultRomantic);
 
-  // Personalized Date Ideas
+  // Персонализированные идеи для свиданий
   const personalizedDateIdeas = defaultDateIdeas;
 
-  // New states for additional AI-generated content:
+  // Дополнительное AI-содержимое:
   const romancePredictions = defaultRomancePredictions;
   const giftSuggestions = defaultGiftSuggestions;
 
-  // UI states
+  // UI-состояния
   const [showGraph, setShowGraph] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [progress, setProgress] = useState("0%");
   const [isLoading, setIsLoading] = useState(false);
   const [loading, setloading] = useState(false);
-
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isLegalModalOpen, setIsLegalModalOpen] = useState(false);
+
   const handleNext = () => {
     setCurrentSlide((prev) => Math.min(prev + 1, slides.length - 1));
   };
@@ -219,27 +220,28 @@ export default function LoveAI() {
   const handlePrev = () => {
     setCurrentSlide((prev) => Math.max(prev - 1, 0));
   };
-const slides = [
-  {
-    title: "WhatsApp",
-    images: ["/what1.avif", "/what2.avif", "/what3.avif"],
-    description:
-      "Open WhatsApp, go to Settings > Chats > Chat history, then choose Export Chat.",
-  },
-  {
-    title: "Telegram",
-    images: ["/1.png", "/2.png", "/3.png"],
-    description:
-      "In Telegram, open the chat, tap on the chat name, and choose Export Chat History to get a file.",
-  },
-];
 
-  // Refs and uploaded file state
+  const slides = [
+    {
+      title: "WhatsApp",
+      images: ["/what1.avif", "/what2.avif", "/what3.avif"],
+      description:
+        "Open WhatsApp, go to Settings > Chats > Chat history, then choose Export Chat.",
+    },
+    {
+      title: "Telegram",
+      images: ["/1.png", "/2.png", "/3.png"],
+      description:
+        "In Telegram, open the chat, tap on the chat name, and choose Export Chat History to get a file.",
+    },
+  ];
+
+  // Refs и состояние загруженного файла
   const graphRef = useRef<HTMLDivElement>(null);
   const progressContainerRef = useRef<HTMLDivElement>(null);
   const [uploadedFileContent, setUploadedFileContent] = useState<string>("");
 
-  // Maximum file size: 10 MB
+  // Максимальный размер файла: 10 MB
   const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
   useEffect(() => {
@@ -575,75 +577,72 @@ const slides = [
       </section>
 
       <section className="py-16 px-8 bg-white text-center shadow-md rounded-lg mx-6 md:mx-20">
-      <h2 className="text-3xl font-bold mb-6 text-blue-600">📤 How to Export Your Chat?</h2>
+        <h2 className="text-3xl font-bold mb-6 text-blue-600">📤 How to Export Your Chat?</h2>
+        {/* Slider Container */}
+        <div className="relative overflow-hidden max-w-2xl mx-auto">
+          <div
+            className="flex transition-transform duration-500 ease-in-out"
+            style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+          >
+            {slides.map((slide, index) => (
+              <div key={index} className="min-w-full p-6">
+                <h3 className="text-2xl font-semibold">{slide.title}</h3>
+                <div className="my-4 flex flex-wrap justify-center gap-4">
+                  {slide.images.map((src, idx) => {
+                    let objectPositionClass = "object-center"; // По умолчанию
 
-      {/* Slider Container */}
-      <div className="relative overflow-hidden max-w-2xl mx-auto">
-        <div
-          className="flex transition-transform duration-500 ease-in-out"
-          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-        >
-          {slides.map((slide, index) => (
-            <div key={index} className="min-w-full p-6">
-              <h3 className="text-2xl font-semibold">{slide.title}</h3>
-              <div className="my-4 flex flex-wrap justify-center gap-4">
-                {slide.images.map((src, idx) => {
-                  let objectPositionClass = "object-center"; // По умолчанию
+                    if (src.includes("what1.avif")) {
+                      objectPositionClass = "object-top";
+                    } else if (src.includes("what2.avif")){
+                      objectPositionClass = "object-[60%_80%]";
+                    } else if (src.includes("what3.avif")){
+                      objectPositionClass = "object-[50%_70%]";
+                    }
 
-                  if (src.includes("what1.avif")) {
-                    objectPositionClass = "object-top";
-                  } else if (src.includes("what2.avif")){
-                    objectPositionClass = "object-[60%_80%]";
-                  
-                } else if (src.includes("what3.avif")){
-                  objectPositionClass = "object-[50%_70%]";
-                }
-
-                  return (
-                    <img
-                      key={idx}
-                      src={src}
-                      alt={`${slide.title} Export ${idx}`}
-                      className={`w-64 h-40 object-cover ${objectPositionClass} rounded-lg shadow-md transition-transform duration-300 hover:scale-105`}
-                    />
-                  );
-                })}
+                    return (
+                      <img
+                        key={idx}
+                        src={src}
+                        alt={`${slide.title} Export ${idx}`}
+                        className={`w-64 h-40 object-cover ${objectPositionClass} rounded-lg shadow-md transition-transform duration-300 hover:scale-105`}
+                      />
+                    );
+                  })}
+                </div>
+                <p className="text-lg text-gray-700">{slide.description}</p>
               </div>
-              <p className="text-lg text-gray-700">{slide.description}</p>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          {/* Navigation Buttons */}
+          <button
+            onClick={handlePrev}
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white p-3 rounded-full shadow-md hover:scale-110 transition-transform disabled:opacity-50"
+            disabled={currentSlide === 0}
+          >
+            ⬅️
+          </button>
+          <button
+            onClick={handleNext}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white p-3 rounded-full shadow-md hover:scale-110 transition-transform disabled:opacity-50"
+            disabled={currentSlide === slides.length - 1}
+          >
+            ➡️
+          </button>
         </div>
 
-        {/* Navigation Buttons */}
-        <button
-          onClick={handlePrev}
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white p-3 rounded-full shadow-md hover:scale-110 transition-transform disabled:opacity-50"
-          disabled={currentSlide === 0}
-        >
-          ⬅️
-        </button>
-        <button
-          onClick={handleNext}
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white p-3 rounded-full shadow-md hover:scale-110 transition-transform disabled:opacity-50"
-          disabled={currentSlide === slides.length - 1}
-        >
-          ➡️
-        </button>
-      </div>
-
-      {/* Progress Indicators */}
-      <div className="mt-6 flex justify-center space-x-2">
-        {slides.map((_, index) => (
-          <span
-            key={index}
-            className={`w-4 h-4 rounded-full transition-all duration-300 ${
-              currentSlide === index ? "bg-blue-600 scale-110" : "bg-gray-300"
-            }`}
-          />
-        ))}
-      </div>
-
-    </section>
+        {/* Progress Indicators */}
+        <div className="mt-6 flex justify-center space-x-2">
+          {slides.map((_, index) => (
+            <span
+              key={index}
+              className={`w-4 h-4 rounded-full transition-all duration-300 ${
+                currentSlide === index ? "bg-blue-600 scale-110" : "bg-gray-300"
+              }`}
+            />
+          ))}
+        </div>
+      </section>
 
       {showResults && (
         <div className="animate-fade-in">
@@ -666,7 +665,7 @@ const slides = [
             </div>
           </section>
 
-          {/* Additional Stats: Horizontal Scrolling Marquee */}
+          {/* Additional Stats */}
           <section className="py-16 px-10 text-center bg-pink-50 overflow-hidden relative">
             <h2 className="text-3xl font-bold mb-6 text-red-600">💖 Additional Stats</h2>
             <div className="whitespace-nowrap flex space-x-8 animate-marquee">
@@ -757,7 +756,7 @@ const slides = [
             </div>
           </section>
 
-          {/* Personalized Date Ideas (Marquee) */}
+          {/* Personalized Date Ideas */}
           <section className="py-16 px-10 text-center bg-white overflow-hidden relative">
             <div className="relative">
               <div className="absolute top-16 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center space-y-2">
@@ -807,7 +806,7 @@ const slides = [
             </div>
           </section>
 
-          {/* Virtual Romance Predictions: 3 Cards */}
+          {/* Virtual Romance Predictions */}
           <section className="py-16 px-10 text-center bg-white">
             <div className="relative">
               <div className="absolute top-16 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center space-y-2">
@@ -879,27 +878,10 @@ const slides = [
               You & Your Partner: <b>{compatibilityScore} Soulmates!</b> 💘
             </p>
           </section>
+          
         </div>
       )}
-
-      <section className="py-16 px-10 text-center bg-white">
-        <h2 id="why" className="text-3xl font-bold mb-8 text-red-500">Why Analyze Your Love? 💞</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-screen-lg mx-auto">
-          <div className="p-6 rounded-lg bg-pink-100 text-gray-800 shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
-            <h3 className="text-xl font-semibold">❤️ See Your Love Story</h3>
-            <p className="mt-3">AI helps you <b>visualize your love journey</b> in a unique way.</p>
-          </div>
-          <div className="p-6 rounded-lg bg-pink-100 text-gray-800 shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
-            <h3 className="text-xl font-semibold">💡 Get Love Advice</h3>
-            <p className="mt-3">Improve your relationship with <b>AI-powered tips</b>.</p>
-          </div>
-          <div className="p-6 rounded-lg bg-pink-100 text-gray-800 shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
-            <h3 className="text-xl font-semibold">💌 Romantic Fun</h3>
-            <p className="mt-3">Turn your chat history into a <b>beautiful love story</b>.</p>
-          </div>
-        </div>
-      </section>
-      <section className="py-16 px-10 text-center bg-white">
+            <section className="py-16 px-10 text-center bg-white">
         <h2 className="text-3xl font-bold mb-6 text-pink-600">💖 Limited Valentine’s Day Offer</h2>
         <p className="text-lg text-gray-700 mb-4">Unlock the full experience with a special 50% discount! ❤️</p>
         <div className="flex justify-center items-center gap-2 text-gray-800 font-mono text-2xl mb-4">
@@ -912,13 +894,83 @@ const slides = [
           <Payment />
         </div>
       </section>
+      {/* Footer */}
       <footer className="bg-red-500 text-white py-8 mt-10 text-center">
         <h2 className="text-2xl font-semibold">LoverTest.AI ❤️</h2>
         <p className="text-gray-300 text-sm max-w-2xl mx-auto">
           Your <b>AI-powered romance analyzer & story generator.</b> Celebrate your love journey today!
         </p>
         <p className="text-gray-200 text-sm mt-6">&copy; {new Date().getFullYear()} LoverTest.AI. All rights reserved.</p>
+        {/* Ссылка для открытия модального окна с юридической информацией */}
+        <button
+          onClick={() => setIsLegalModalOpen(true)}
+          className="mt-4 underline text-sm hover:text-gray-300"
+        >
+          Legal Information
+        </button>
       </footer>
+
+      {/* Модальное окно с юридической информацией */}
+      {isLegalModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg max-w-3xl w-full relative overflow-y-auto max-h-[90vh]">
+            <button
+              onClick={() => setIsLegalModalOpen(false)}
+              className="absolute top-2 right-2 text-gray-600 text-2xl"
+            >
+              &times;
+            </button>
+            <h2 className="text-3xl font-bold mb-6">Legal Information</h2>
+            {/* Terms of Service */}
+            <div className="mb-10">
+              <h3 className="text-2xl font-bold mb-2">Terms of Service</h3>
+              <p><strong>Effective Date:</strong> February 14, 2025</p>
+              <ol className="list-decimal ml-6 mt-4 space-y-2">
+                <li><strong>Acceptance of Terms:</strong> Welcome to LoverTest.AI (“Service”, “Site”). By accessing or using our Service, you agree to be bound by these Terms of Service (“Terms”). If you do not agree with any part of these Terms, please do not use our Service.</li>
+                <li><strong>Changes to Terms:</strong> LoverTest.AI reserves the right to modify these Terms at any time. All changes will be effective upon posting to the Site. Your continued use of the Service constitutes acceptance of such modifications.</li>
+                <li><strong>Eligibility:</strong> You must be at least 18 years of age to use the Service. By using the Service, you represent and warrant that you meet this age requirement.</li>
+                <li><strong>Access and Usage:</strong> LoverTest.AI does not require the creation of user accounts or login credentials to access the Service. All features of the Service are available without registration.</li>
+                <li><strong>Payment Terms:</strong> Certain features of the Service require payment. By providing payment information, you represent that you are authorized to use the payment method. All payments are processed securely via our third-party payment provider. Please review our Refund Policy for details regarding payment reversals.</li>
+                <li><strong>User Conduct:</strong> You agree to use the Service only for lawful purposes and in a way that does not infringe the rights of, restrict, or inhibit anyone else’s use of the Service.</li>
+                <li><strong>Intellectual Property:</strong> All content on the Service, including text, graphics, logos, images, and software, is the property of LoverTest.AI or its licensors and is protected by applicable intellectual property laws.</li>
+                <li><strong>Disclaimer of Warranties:</strong> The Service is provided “as is” and “as available” without any warranties of any kind, whether express or implied.</li>
+                <li><strong>Limitation of Liability:</strong> In no event shall LoverTest.AI, its affiliates, or their respective officers, directors, or employees be liable for any indirect, incidental, special, consequential, or punitive damages arising from or in connection with your use of the Service.</li>
+                <li><strong>Indemnification:</strong> You agree to indemnify and hold harmless LoverTest.AI and its affiliates from any claims, losses, liabilities, or expenses (including reasonable attorneys’ fees) arising from your use of the Service or violation of these Terms.</li>
+                <li><strong>Governing Law and Dispute Resolution:</strong> These Terms shall be governed by and construed in accordance with the laws of [Insert Jurisdiction]. Any disputes shall be resolved through binding arbitration in [Insert Location], except where prohibited by applicable law.</li>
+                <li><strong>Contact Information:</strong> For any questions regarding these Terms, please contact us at: assetalmas07@gmail.com.</li>
+              </ol>
+            </div>
+            {/* Privacy Notice */}
+            <div className="mb-10">
+              <h3 className="text-2xl font-bold mb-2">Privacy Notice</h3>
+              <p><strong>Effective Date:</strong> February 14, 2025</p>
+              <ol className="list-decimal ml-6 mt-4 space-y-2">
+                <li><strong>Information We Collect:</strong> We may collect personal information such as your name, email address, payment details, usage data (including IP address, browser type, device information, and pages visited) and use cookies and similar technologies to enhance your experience.</li>
+                <li><strong>How We Use Your Information:</strong> We use your information to provide, maintain, and improve our Service; process transactions; personalize your experience; and monitor usage patterns.</li>
+                <li><strong>Sharing and Disclosure:</strong> Your data is not sold or rented to third parties. It may be shared with trusted service providers under strict confidentiality obligations or as required by law.</li>
+                <li><strong>Data Security:</strong> We implement reasonable measures to protect your data, though no method of transmission over the Internet is completely secure.</li>
+                <li><strong>Your Rights and Choices:</strong> You have the right to access, update, or delete your personal information by contacting us directly. Disabling cookies via your browser may affect the functionality of the Service.</li>
+                <li><strong>International Data Transfers:</strong> Your information may be transferred to servers outside your country of residence. By using our Service, you consent to such transfers.</li>
+                <li><strong>Changes to This Privacy Notice:</strong> Updates to this Notice will be posted on our Site and your continued use of the Service signifies acceptance of the changes.</li>
+                <li><strong>Contact Information:</strong> For any inquiries, please contact us at: assetalmas07@gmail.com.</li>
+              </ol>
+            </div>
+            {/* Refund Policy */}
+            <div className="mb-10">
+              <h3 className="text-2xl font-bold mb-2">Refund Policy</h3>
+              <p><strong>Effective Date:</strong> February 14, 2025</p>
+              <ol className="list-decimal ml-6 mt-4 space-y-2">
+                <li><strong>Eligibility for Refunds:</strong> Refunds apply to digital products or services purchased directly from LoverTest.AI. Requests must be submitted within [30] days of purchase.</li>
+                <li><strong>Refund Process:</strong> To request a refund, contact our support team at assetalmas07@gmail.com with your order number and detailed explanation. We will respond within [7–10] business days. If approved, the refund will be issued within [10] business days to the original payment method.</li>
+                <li><strong>Non-Refundable Items:</strong> Certain items, such as partially used subscriptions or promotional offers, may be non-refundable and will be clearly identified at the time of purchase.</li>
+                <li><strong>Cancellation Policy:</strong> You may cancel your subscription at any time; however, charges already incurred will not be refunded.</li>
+                <li><strong>Dispute Resolution:</strong> If you are dissatisfied with your refund request outcome, please contact our support team at assetalmas07@gmail.com. Unresolved disputes will be handled according to our Terms of Service.</li>
+                <li><strong>Contact Information:</strong> For any questions regarding this Refund Policy, please contact us at: assetalmas07@gmail.com.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

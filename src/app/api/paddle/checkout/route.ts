@@ -22,8 +22,8 @@ export async function POST(req: Request) {
       quantity: "1",
       recurring: "false", // Разовая оплата
       tax_included: "true", // Включает налоги (если надо)
-      return_url: "localhost:3000/payment-paid-314159265358979",
-      webhook_url: "localhost:3000/api/paddle/webhook",
+      return_url: "https://lovertest.xyz/payment-paid-314159265358979",
+      webhook_url: "https://lovertest.xyz/api/paddle/webhook",
     });
 
     const paddleResponse = await fetch("https://vendors.paddle.com/api/2.0/product/generate_pay_link", {
